@@ -1,0 +1,5 @@
+<modules>
+    <module>auth-service</module>
+    <module>job-api</module>
+    <module>worker-engine</module>
+</modules>

@@ -1,0 +1,2 @@
+# Ignore real configuration files
+**/src/main/resources/application.properties
