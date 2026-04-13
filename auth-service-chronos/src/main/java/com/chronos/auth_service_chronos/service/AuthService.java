@@ -1,8 +1,11 @@
 package com.chronos.auth_service_chronos.service;
 
+import com.chronos.auth_service_chronos.dto.LoginRequestDto;
+import com.chronos.auth_service_chronos.dto.LoginResponseDto;
 import com.chronos.auth_service_chronos.dto.RegisterRequestDto;
 import com.chronos.auth_service_chronos.model.User;
 import com.chronos.auth_service_chronos.repository.UserRepository;
+import com.chronos.auth_service_chronos.util.JwtUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,10 +17,12 @@ import java.util.Optional;
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
     @Transactional
     public User registerUser(RegisterRequestDto request) {
@@ -32,5 +37,14 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
         return userRepository.save(user);
+    }
+
+    public LoginResponseDto loginUser(LoginRequestDto request){
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new IllegalArgumentException("Username not found"));
+        String fullToken = jwtUtil.generateToken(user.getUsername(), user.getEmail());
+        return LoginResponseDto.builder()
+                .token(fullToken)
+                .message("Here's your token baccha")
+                .build();
     }
 }

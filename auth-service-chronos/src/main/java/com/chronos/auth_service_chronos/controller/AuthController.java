@@ -1,5 +1,6 @@
 package com.chronos.auth_service_chronos.controller;
 
+import com.chronos.auth_service_chronos.dto.LoginRequestDto;
 import com.chronos.auth_service_chronos.dto.RegisterRequestDto;
 import com.chronos.auth_service_chronos.model.User;
 import com.chronos.auth_service_chronos.service.AuthService;
@@ -24,5 +25,10 @@ public class AuthController {
         authService.registerUser(registerRequestDto);
 
         return ResponseEntity.ok("User successfully registered");
+    }
+    @PostMapping("/login")
+    public ResponseEntity<token> loginUser(@RequestBody LoginRequestDto loginRequestDto){
+        authService.loginUser(loginRequestDto);
+        return ResponseEntity.ok(User + "logged in successfully")
     }
 }
