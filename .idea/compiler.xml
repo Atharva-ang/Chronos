@@ -8,15 +8,15 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Chronos" />
       </profile>
-      <profile name="Annotation profile for worker-engine-chronos" enabled="true">
+      <profile name="Annotation profile for auth-service-chronos" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.44/lombok-1.18.44.jar" />
         </processorPath>
-        <module name="worker-engine-chronos" />
         <module name="auth-service-chronos" />
+        <module name="worker-engine-chronos" />
         <module name="job-api-chronos" />
       </profile>
     </annotationProcessing>

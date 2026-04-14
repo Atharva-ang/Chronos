@@ -40,7 +40,13 @@ public class AuthService {
     }
 
     public LoginResponseDto loginUser(LoginRequestDto request){
-        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new IllegalArgumentException("Username not found"));
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() ->
+                new IllegalArgumentException("Username not found"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid password");
+        }
+
         String fullToken = jwtUtil.generateToken(user.getUsername(), user.getEmail());
         return LoginResponseDto.builder()
                 .token(fullToken)
