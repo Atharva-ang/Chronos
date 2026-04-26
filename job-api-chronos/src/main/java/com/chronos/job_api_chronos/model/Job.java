@@ -36,7 +36,7 @@ public class Job {
     private JobStatus status;
 
     private String cronExpression; // For recurring jobs (e.g., "0 0 * * *")
-    private boolean isRecurring;
+    private Boolean isRecurring;
 
     private int retryCount;
     private int maxRetries;
