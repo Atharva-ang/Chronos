@@ -7,11 +7,8 @@ import com.chronos.auth_service_chronos.model.User;
 import com.chronos.auth_service_chronos.repository.UserRepository;
 import com.chronos.auth_service_chronos.util.JwtUtil;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class AuthService {

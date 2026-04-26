@@ -3,8 +3,8 @@ package com.chronos.auth_service_chronos.controller;
 import com.chronos.auth_service_chronos.dto.LoginRequestDto;
 import com.chronos.auth_service_chronos.dto.LoginResponseDto;
 import com.chronos.auth_service_chronos.dto.RegisterRequestDto;
-import com.chronos.auth_service_chronos.model.User;
 import com.chronos.auth_service_chronos.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,20 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor // Automatically creates the constructor for 'final' fields
 public class AuthController {
 
-
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody RegisterRequestDto registerRequestDto) {
-
+    public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
         authService.registerUser(registerRequestDto);
-
         return ResponseEntity.ok("User successfully registered");
     }
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> loginUser(@RequestBody LoginRequestDto loginRequestDto){
-        LoginResponseDto response = authService.loginUser(loginRequestDto);
 
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> loginUser(@Valid @RequestBody LoginRequestDto loginRequestDto){
+        LoginResponseDto response = authService.loginUser(loginRequestDto);
         return ResponseEntity.ok(response);
     }
 }

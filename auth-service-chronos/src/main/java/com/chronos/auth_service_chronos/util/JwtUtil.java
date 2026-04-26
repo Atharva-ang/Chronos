@@ -15,16 +15,13 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    // Pulls from application.properties so you don't hardcode secrets
     @Value("${jwt.secret}")
     private String secretKey;
 
     @Value("${jwt.expiration}")
     private long jwtExpiration;
 
-
     public String generateToken(String username, String email) {
-
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", email);
 
@@ -37,23 +34,6 @@ public class JwtUtil {
                 .compact();
     }
 
-
-    private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
-
-    public String extractUsername(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-    }
-
-
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -64,5 +44,19 @@ public class JwtUtil {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public String extractUsername(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSignInKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+    private Key getSignInKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }
