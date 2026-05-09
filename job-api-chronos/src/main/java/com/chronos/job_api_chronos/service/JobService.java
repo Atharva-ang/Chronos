@@ -34,12 +34,12 @@ public class JobService {
                 .payload(jobRequest.getPayload())
                 .status(JobStatus.INQUEUE)
                 .cronExpression(jobRequest.getCronExpression())
-                .isRecurring(jobRequest.isRecurring())
+                .isRecurring(jobRequest.getIsRecurring())
                 .scheduledAt(jobRequest.getScheduledAt())
                 .build();
 
         // For recurring jobs, calculate the first execution time
-        if (newJob.isRecurring() && newJob.getCronExpression() != null) {
+        if (Boolean.TRUE.equals(newJob.getIsRecurring()) && newJob.getCronExpression() != null) {
             try {
                 CronExpression cron = CronExpression.parse(newJob.getCronExpression());
                 var next = cron.next(now.atZone(ZoneId.systemDefault()));
@@ -56,7 +56,7 @@ public class JobService {
         Job savedJob = jobRepository.save(newJob);
 
         // Only publish immediately if it's not scheduled for the future and not recurring
-        if (!savedJob.isRecurring() && (savedJob.getScheduledAt() == null || !savedJob.getScheduledAt().isAfter(now))) {
+        if (!Boolean.TRUE.equals(savedJob.getIsRecurring()) && (savedJob.getScheduledAt() == null || !savedJob.getScheduledAt().isAfter(now))) {
             log.info("Publishing job {} immediately to queue", savedJob.getId());
             rabbitTemplate.convertAndSend(
                     RabbitMqConfig.EXCHANGE_NAME,
@@ -65,7 +65,7 @@ public class JobService {
             );
         } else if (savedJob.getScheduledAt() != null) {
             log.info("Job {} scheduled for execution at {}", savedJob.getId(), savedJob.getScheduledAt());
-        } else if (savedJob.isRecurring()) {
+        } else if (Boolean.TRUE.equals(savedJob.getIsRecurring())) {
             log.info("Recurring job {} created with cron: {}", savedJob.getId(), savedJob.getCronExpression());
         }
 

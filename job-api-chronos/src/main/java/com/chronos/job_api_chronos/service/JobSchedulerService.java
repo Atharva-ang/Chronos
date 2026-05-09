@@ -50,7 +50,7 @@ public class JobSchedulerService {
             for (int i = 0; i < limit; i++) {
                 Job job = scheduledJobs.get(i);
 
-                if (!job.isRecurring()) {
+                if (!job.getIsRecurring()) {
                     try {
                         log.info("Publishing scheduled job {}", job.getId());
 

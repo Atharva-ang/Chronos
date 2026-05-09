@@ -7,6 +7,8 @@ services:
   postgres-db:
     image: postgres:15-alpine
     container_name: chronos-postgres
+    env_file:
+      - Secrets.env
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${FIN_DB_PASSWORD}
@@ -24,6 +26,8 @@ services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: chronos-rabbitmq
+    env_file:
+      - Secrets.env
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: ${FIN_RMQ_PASSWORD}

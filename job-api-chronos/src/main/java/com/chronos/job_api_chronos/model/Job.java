@@ -36,10 +36,10 @@ public class Job {
     private JobStatus status;
 
     private String cronExpression; // For recurring jobs (e.g., "0 0 * * *")
-    private boolean isRecurring;
+    private Boolean isRecurring;
 
-    private int retryCount;
-    private int maxRetries;
+    private Integer retryCount;
+    private Integer maxRetries;
 
     private LocalDateTime createdAt;
     private LocalDateTime scheduledAt; // For future execution
@@ -49,6 +49,8 @@ public class Job {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
-        if (this.maxRetries == 0) this.maxRetries = 3;
+        if (this.retryCount == null) this.retryCount = 0;      // add this too for safety
+        if (this.maxRetries == null) this.maxRetries = 3;
+        if (this.isRecurring == null) this.isRecurring = false;
     }
 }
